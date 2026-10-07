@@ -27,21 +27,13 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | Lần chạy | n_estimators | learning_rate | max_depth | f1_score | accuracy |
 |---|---|---|---|---|---|
-| 1 | ___ | ___ | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ | ___ | ___ |
+| 1 | 100 | 0.1 | 3 | 0.7109 | 0.8780 |
+| 2 | 50 | 0.05 | 2 | 0.6051 | 0.8460 |
+| 3 | 200 | 0.1 | 5 | 0.7149 | 0.8740 |
 
-**Bộ siêu tham số đã chọn:** `n_estimators=___`, `learning_rate=___`, `max_depth=___`.
+**Bộ siêu tham số đã chọn:** `n_estimators=200`, `learning_rate=0.1`, `max_depth=5`.
 
-**Lý do:** ___
-
-<!--
-Trả lời trong phần Lý do:
-  - Vì sao bộ này tốt hơn các bộ còn lại (dựa trên f1_score, không phải accuracy)?
-  - Lần chạy có accuracy cao nhất có trùng với lần có f1_score cao nhất không?
-    Nếu không, điều đó nói lên điều gì?
-  - Bạn quan sát thấy đánh đổi nào giữa n_estimators và learning_rate?
--->
+**Lý do:** Bộ tham số này đạt giá trị F1 cao nhất (0.7149), vượt qua ngưỡng tối thiểu (0.65). Lần chạy có accuracy cao nhất là lần 1 (0.8780) nhưng F1 lại thấp hơn, cho thấy accuracy có thể gây hiểu nhầm đối với dữ liệu mất cân bằng. Quan sát thấy khi giảm learning_rate thì f1 giảm đáng kể, và tăng số cây cùng với độ sâu cây đã giúp tăng năng lực mô hình để dự đoán các trường hợp khó (thu nhập > 50K).
 
 ---
 
@@ -49,16 +41,9 @@ Trả lời trong phần Lý do:
 
 <!-- Khoảng 120 - 150 từ. -->
 
-___
+Tập dữ liệu Adult có phân bố cực kỳ mất cân bằng, chỉ có 24.8% số người có thu nhập trên 50K (lớp dương). Điều này dẫn đến việc nếu mô hình học được rất ít mà luôn đoán "thu nhập thấp" cho tất cả các mẫu, độ chính xác (accuracy) vẫn có thể đạt tới mức 75.2%. Do đó, con số accuracy này không phản ánh khả năng phân loại chính xác các trường hợp quan trọng, và khiến chúng ta lầm tưởng là mô hình hoạt động tốt.
 
-<!--
-Cần nêu được:
-  - Phân bố lớp của tập dữ liệu (tỷ lệ lớp thu nhập > 50K) và hệ quả của nó.
-  - Accuracy của một mô hình luôn trả lời "thu nhập thấp" là bao nhiêu, vì sao con số
-    đó gây hiểu nhầm.
-  - F1 của lớp dương đo điều gì mà accuracy không đo được.
-  - Vì sao KHÔNG dùng average="weighted" hay average="macro" khi gọi f1_score.
--->
+Ngược lại, F1-score của lớp dương (tính từ precision và recall của việc dự đoán lớp thu nhập > 50K) thể hiện trực tiếp khả năng của mô hình trong việc bắt đúng các trường hợp thiểu số mà không dự đoán sai quá nhiều. Chúng ta chỉ lấy f1 cho lớp dương (không dùng `average="weighted"` hay `"macro"`) để đảm bảo không bị lớp đa số làm lu mờ. Đây là lý do F1-score là thước đo chất lượng phù hợp và đáng tin cậy nhất cho bài toán này.
 
 ---
 
