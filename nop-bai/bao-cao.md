@@ -13,11 +13,11 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | | |
 |---|---|
-| Họ và tên | ___ |
-| MSSV | ___ |
+| Họ và tên | Nguyễn Thị Mừng |
+| MSSV | 2A202602575 |
 | Lớp / Khóa | K4 |
-| Repo GitHub | https://github.com/___/___ |
-| Ngày nộp | ___ |
+| Repo GitHub | https://github.com/mungan2004/K4-L3-DAY21-NguyenThiMung-2A202602575-CI-CD-for-AI-Systems |
+| Ngày nộp | 07/10/2026 |
 
 ---
 
@@ -53,9 +53,9 @@ Ngược lại, F1-score của lớp dương (tính từ precision và recall c�
 
 | Khó khăn | Nguyên nhân | Cách giải quyết |
 |---|---|---|
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
+| Lỗi đẩy code khi có connection_string | Tính năng bảo mật của GitHub phát hiện khóa bảo mật trong file cấu hình .dvc/config nên chặn lại. | Dùng lệnh `dvc remote modify --unset` để xóa khóa khỏi file config và dùng biến môi trường để cấp quyền. |
+| Máy ảo báo Connection timeout khi gọi API | Cổng mặc định 8080 của uvicorn bị chặn bởi hệ thống tường lửa (NSG) của Azure. | Vào Azure Portal, phần Networking của máy ảo, tạo một Inbound port rule mới mở cổng 8080. |
+| API trả về FileNotFoundError (thiếu model) | Script tải model trên VM bị lỗi do thiếu biến môi trường AZURE_STORAGE_CONNECTION_STRING. | Inject biến môi trường chứa chuỗi kết nối trực tiếp vào file cấu hình `income-api.service` của systemd. |
 
 ---
 
@@ -65,10 +65,10 @@ Ngược lại, F1-score của lớp dương (tính từ precision và recall c�
 
 | | f1_score | accuracy |
 |---|---|---|
-| Bước 2 (chỉ `train_batch1`) | ___ | ___ |
-| Bước 3 (thêm `train_batch2`) | ___ | ___ |
+| Bước 2 (chỉ `train_batch1`) | 0.7149 | 0.8740 |
+| Bước 3 (thêm `train_batch2`) | 0.7354 | 0.8820 |
 
-**Nhận xét:** ___
+**Nhận xét:** Trong trường hợp này, khi bổ sung thêm dữ liệu (từ 22.361 mẫu lên 44.722 mẫu), chỉ số f1_score và accuracy đều tăng lên đôi chút. Điều này cho thấy với lượng dữ liệu phong phú hơn, mô hình đã học được thêm các đặc trưng hữu ích để phân loại tốt hơn các trường hợp khó (thu nhập > 50K), chứng tỏ việc liên tục cập nhật dữ liệu mới là rất cần thiết. Tuy nhiên, điều cốt lõi nhất được kiểm chứng ở bước này là quy trình CI/CD hoàn toàn tự động kích hoạt quá trình huấn luyện và triển khai khi có dữ liệu mới.
 
 <!--
 Một câu trả lời trung thực kiểu "f1 giảm 0,01 vì dữ liệu mới cùng phân phối, không mang
